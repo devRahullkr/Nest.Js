@@ -11,4 +11,12 @@ export class PizzaService {
     // console.log("service id",id)
     return `Pizza ${id} ready.`;
   }
+
+  createPizza(data: unknown) {
+    // console.log('Service data', zamzam);
+    return {
+      message: 'Pizza created 🍕',
+      data,
+    };
+  }
 }
