@@ -9,4 +9,9 @@ export class AuthController {
   signup(@Body() body: any) {
     return this.authservice.signup(body);
   }
+
+  @Post("login")
+  login(@Body() body:any){
+    return this.authservice.login(body)
+  }
 }
