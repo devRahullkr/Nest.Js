@@ -69,4 +69,33 @@ export class AuthService {
       refreshToken,
     };
   }
+
+  async refresh(data: any) {
+    try {
+      const payload: any = jwt.verify(
+        data.refreshToken,
+        process.env.REFRESH_SECRET,
+      );
+
+      const user = await this.prisma.user.findUnique({
+        where: { id: payload.id },
+      });
+
+      if (!user || !user.refreshToken !== data.refreshToken) {
+        throw new BadRequestException('Invalid refresh token');
+      }
+
+      const newAccessToken = jwt.sign(
+        { userId: user.id },
+        process.env.JWT_SECRET,
+        { expiresIn: '15m' },
+      );
+
+      return {
+        accessToken: newAccessToken,
+      };
+    } catch (error) {
+      throw new BadRequestException('Token expired or invalid ❌');
+    }
+  }
 }
